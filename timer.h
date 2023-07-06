@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __TIMER_H
-#define __TIMER_H
+#ifndef ICC_JUNK_TIMER_H
+#define ICC_JUNK_TIMER_H
 
 #include <chrono>
 
@@ -27,7 +27,7 @@ public:
     
     /// returns elapsed time in seconds
     double elapsed() const {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(_stop - _start).count() / 1000.;
+        return (double)std::chrono::duration_cast<std::chrono::milliseconds>(_stop - _start).count() / 1000.;
     }
 };
 

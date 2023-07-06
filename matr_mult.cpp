@@ -8,7 +8,7 @@ using namespace std;
 
 typedef float T;
 //template <class T>
-void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
+static void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
 {
 #if _ICC
 #    pragma ivdep
@@ -33,7 +33,7 @@ void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
 
 //template <class T>
 typedef float T;
-void matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
+static void matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
 {
     for(size_t i = 0 ; i != N ; ++i) {
         for (size_t j = 0 ; j != M ; ++j) {
@@ -50,7 +50,7 @@ void matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t K, size
 }
 
 //template<class T>
-void print_as_matr(T const *M, size_t rows, size_t colls, char const *title)
+static void print_as_matr(T const *M, size_t rows, size_t colls, char const *title)
 {
     if(title)
         printf("%s\n", title);
@@ -67,6 +67,7 @@ void print_as_matr(T const *M, size_t rows, size_t colls, char const *title)
     }
 }
 
+static 
 T *one(size_t n)
 {
     T *data = new T[n];
@@ -80,19 +81,24 @@ T *one(size_t n)
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
 #if _WIN32
+extern int getopt(int argc, char** argv, const char* opt);
 int getopt(int argc, char **argv, const char *opt)
 {
+    (void)argc;
+    (void)argv;
+    (void)opt;
     return -1;
 }
 
-char *optarg = 0;
+extern char* optarg;
+char *optarg = NULL;
 
 #else
 #   include <getopt.h>
 #endif
 
-bool verbose = false;
-int n_try = 5;
+static bool verbose = false;
+static int n_try = 5;
 
 int main(int argc, char **argv)
 {
@@ -112,7 +118,7 @@ int main(int argc, char **argv)
     }
 
     {
-        const int N = 3, K = 3, M =3;
+        const size_t N = 3, K = 3, M =3;
         
         float A[] = {1, 0, 0, 0, 2, 0, 0, 0, 3};
         if(verbose)
@@ -132,7 +138,7 @@ int main(int argc, char **argv)
         printf("Elapsed: %g sec.\n", t.elapsed());
     }
     {
-        int N = 5, K = 2, M = 5;
+        size_t N = 5, K = 2, M = 5;
         
         float *A = one(N*K);
         if(verbose)
@@ -153,7 +159,7 @@ int main(int argc, char **argv)
 
     }
     {
-        int N = 2, K = 5, M = 3;
+        size_t N = 2, K = 5, M = 3;
         
         float *A = one(N*K);
         if(verbose)
@@ -176,7 +182,7 @@ int main(int argc, char **argv)
 
 #if 1
     {
-        int N = 1000, K = 2000, M =2000;
+        size_t N = 1000, K = 2000, M =2000;
         
         
 
@@ -189,7 +195,7 @@ int main(int argc, char **argv)
         
         float *C = new float[N*M];
 
-        double results[n_try];
+        double *results = new double[(size_t)n_try];
         for(int i = 0 ; i < n_try ; ++i) {
 
             Timer t;
@@ -201,7 +207,7 @@ int main(int argc, char **argv)
             results[i] = t.elapsed();
         }
         for(int i = 0 ; i < n_try ; ++i)
-            printf("Elapsed: (%d,%d,%d) %g sec.\n", N, K, M, results[i]);
+            printf("Elapsed: (%llu,%llu,%llu) %g sec.\n", N, K, M, results[i]);
 
     }
 #endif

@@ -8,6 +8,7 @@ using namespace std;
 
 //template <class T>
 typedef float T;
+static
 T dot(T const *A, T const *B, size_t N)
 {
     //#pragma ivdep
@@ -21,6 +22,7 @@ T dot(T const *A, T const *B, size_t N)
 }
 
 // template<class T>
+static 
 T *one(size_t n)
 {
     T *data = new T[n];
@@ -34,7 +36,7 @@ T *one(size_t n)
 int main()
 {
     {
-        int N = 1000000;
+        size_t N = 1000000;
         
         float *A = one(N);
         float *B = one(N);

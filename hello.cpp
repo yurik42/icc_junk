@@ -24,7 +24,7 @@ int main()
 #endif
 
     char hostname[100];
-    int ncpus;
+    unsigned int ncpus;
 
     gethostname( hostname, sizeof( hostname ) );
     ncpus = std::thread::hardware_concurrency();

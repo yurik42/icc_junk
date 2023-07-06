@@ -32,3 +32,7 @@ Thread model: posix
 	
 	$ "c:\Program Files\CMake\bin\cmake.exe" .. -G "Visual Studio 17 2022" -A x64 -T "Intel(R) oneAPI DPC++ Compiler 2023"
 	$ "c:\Program Files\CMake\bin\cmake.exe" --build . --config Release
+
+### Updated on 7/6/2023
+VisualStudio clang compiler
+	$ "c:\Program Files\CMake\bin\cmake.exe" .. -G "Visual Studio 17 2022" -T "ClangCL"
