@@ -35,4 +35,5 @@ Thread model: posix
 
 ### Updated on 7/6/2023
 VisualStudio clang compiler
+
 	$ "c:\Program Files\CMake\bin\cmake.exe" .. -G "Visual Studio 17 2022" -T "ClangCL"
