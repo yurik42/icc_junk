@@ -8,7 +8,7 @@ using namespace std;
 
 typedef float T;
 //template <class T>
-static void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
+static T matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
 {
 #if _ICC
 #    pragma ivdep
@@ -25,6 +25,7 @@ static void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M
             C[i*K + j] = s;
         }
     }
+    return C[(N - 1) * K + (M - 1)];
 }
 
 //
@@ -33,7 +34,7 @@ static void matr_mult(T const *A, T const *B, T *C, size_t N, size_t K, size_t M
 
 //template <class T>
 typedef float T;
-static void matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
+static T matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t K, size_t M)
 {
     for(size_t i = 0 ; i != N ; ++i) {
         for (size_t j = 0 ; j != M ; ++j) {
@@ -47,6 +48,7 @@ static void matr_mult_transposed(T const *A, T const *B, T *C, size_t N, size_t 
             C[i*M + j] = s;
         }
     }
+    return C[(N - 1) * K + (M - 1)];
 }
 
 //template<class T>
@@ -196,18 +198,24 @@ int main(int argc, char **argv)
         float *C = new float[N*M];
 
         double *results = new double[(size_t)n_try];
+        float *vals = new float[(size_t)n_try];
         for(int i = 0 ; i < n_try ; ++i) {
 
             Timer t;
+            float v;
             t.start();
-            matr_mult_transposed(A, B, C, N, K, M);
+            v = matr_mult_transposed(A, B, C, N, K, M);
             t.stop();
             if(verbose)
                 print_as_matr(C, N, M, "C:");
             results[i] = t.elapsed();
+            vals[i] = v;
         }
         for(int i = 0 ; i < n_try ; ++i)
-            printf("Elapsed: (%llu,%llu,%llu) %g sec.\n", N, K, M, results[i]);
+            printf("Elapsed: (%zu,%zu,%zu,%g) %g sec.\n", N, K, M, double(vals[i]), results[i]);
+
+        delete[] results;
+        delete[] vals;
 
     }
 #endif
